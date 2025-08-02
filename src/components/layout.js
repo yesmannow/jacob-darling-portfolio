@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled, { ThemeProvider } from 'styled-components';
 import { Head, Loader, Nav, Social, Email, Footer } from '@components';
 import { GlobalStyle, theme } from '@styles';
+import { ThemeProvider as CustomThemeProvider } from '../contexts/ThemeContext';
+import ThemeToggle from './ThemeToggle';
 
 const StyledContent = styled.div`
   display: flex;
@@ -51,28 +53,32 @@ const Layout = ({ children, location }) => {
       <Head />
 
       <div id="root">
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
+        <CustomThemeProvider>
+          <ThemeProvider theme={theme}>
+            <GlobalStyle />
 
-          <a className="skip-to-content" href="#content">
-            Skip to Content
-          </a>
+            <a className="skip-to-content" href="#content">
+              Skip to Content
+            </a>
 
-          {isLoading && isHome ? (
-            <Loader finishLoading={() => setIsLoading(false)} />
-          ) : (
-            <StyledContent>
-              <Nav isHome={isHome} />
-              <Social isHome={isHome} />
-              <Email isHome={isHome} />
+            <ThemeToggle />
 
-              <div id="content">
-                {children}
-                <Footer />
-              </div>
-            </StyledContent>
-          )}
-        </ThemeProvider>
+            {isLoading && isHome ? (
+              <Loader finishLoading={() => setIsLoading(false)} />
+            ) : (
+              <StyledContent>
+                <Nav isHome={isHome} />
+                <Social isHome={isHome} />
+                <Email isHome={isHome} />
+
+                <div id="content">
+                  {children}
+                  <Footer />
+                </div>
+              </StyledContent>
+            )}
+          </ThemeProvider>
+        </CustomThemeProvider>
       </div>
     </>
   );

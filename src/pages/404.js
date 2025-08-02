@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'gatsby';
-import { Helmet } from 'react-helmet';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -11,17 +10,23 @@ import { usePrefersReducedMotion } from '@hooks';
 const StyledMainContainer = styled.main`
   ${({ theme }) => theme.mixins.flexCenter};
   flex-direction: column;
+  padding: 0 20px;
 `;
+
 const StyledTitle = styled.h1`
   color: var(--green);
   font-family: var(--font-mono);
   font-size: clamp(100px, 25vw, 200px);
   line-height: 1;
+  margin: 0;
 `;
+
 const StyledSubtitle = styled.h2`
   font-size: clamp(30px, 5vw, 50px);
   font-weight: 400;
+  margin: 20px 0;
 `;
+
 const StyledHomeButton = styled(Link)`
   ${({ theme }) => theme.mixins.bigButton};
   margin-top: 40px;
@@ -33,9 +38,9 @@ const NotFoundPage = ({ location }) => {
 
   useEffect(() => {
     if (prefersReducedMotion) {
+      setIsMounted(true);
       return;
     }
-
     const timeout = setTimeout(() => setIsMounted(true), navDelay);
     return () => clearTimeout(timeout);
   }, []);
@@ -50,8 +55,6 @@ const NotFoundPage = ({ location }) => {
 
   return (
     <Layout location={location}>
-      <Helmet title="Page Not Found" />
-
       {prefersReducedMotion ? (
         <>{content}</>
       ) : (
@@ -72,3 +75,11 @@ NotFoundPage.propTypes = {
 };
 
 export default NotFoundPage;
+
+// Gatsby Head API (v4+)
+export const Head = () => (
+  <>
+    <title>Page Not Found</title>
+    <meta name="robots" content="noindex" />
+  </>
+);

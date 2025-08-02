@@ -48,6 +48,22 @@ const variables = css`
     --ham-after-active: bottom 0.1s ease-out,
       transform 0.22s cubic-bezier(0.215, 0.61, 0.355, 1) 0.12s;
   }
+
+  /* Light mode variables */
+  .light-mode {
+    --dark-navy: #f8f9fa;
+    --navy: #ffffff;
+    --light-navy: #f1f3f4;
+    --lightest-navy: #e8eaed;
+    --navy-shadow: rgba(0, 0, 0, 0.1);
+    --dark-slate: #5f6368;
+    --slate: #5f6368;
+    --light-slate: #3c4043;
+    --lightest-slate: #202124;
+    --white: #202124;
+    --green: #1a73e8;
+    --green-tint: rgba(26, 115, 232, 0.1);
+  }
 `;
 
 export default variables;
