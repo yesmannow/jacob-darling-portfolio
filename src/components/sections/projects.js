@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { Link, useStaticQuery, graphql } from 'gatsby';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
 import { srConfig } from '@config';
 import sr from '@utils/sr';
@@ -265,13 +265,41 @@ const Projects = () => {
 
   return (
     <StyledProjectsSection>
-      <h2 ref={revealTitle}>Other Noteworthy Projects</h2>
+      <motion.h2
+        ref={revealTitle}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        viewport={{ once: true }}
+      >
+        Other Noteworthy Projects
+      </motion.h2>
 
-      <Link className="inline-link archive-link" to="/archive" ref={revealArchiveLink}>
-        view the archive
-      </Link>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        viewport={{ once: true }}
+      >
+        <Link className="inline-link archive-link" to="/archive" ref={revealArchiveLink}>
+          view the archive
+        </Link>
+      </motion.div>
 
-      <ul className="projects-grid">
+      <motion.ul
+        className="projects-grid"
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true }}
+        variants={{
+          hidden: {},
+          visible: {
+            transition: {
+              staggerChildren: 0.1,
+            },
+          },
+        }}
+      >
         {prefersReducedMotion ? (
           <>
             {projectsToShow &&
@@ -280,31 +308,37 @@ const Projects = () => {
               ))}
           </>
         ) : (
-          <TransitionGroup component={null}>
+          <>
             {projectsToShow &&
               projectsToShow.map(({ node }, i) => (
-                <CSSTransition
+                <motion.li
                   key={i}
-                  classNames="fadeup"
-                  timeout={i >= GRID_LIMIT ? (i - GRID_LIMIT) * 300 : 300}
-                  exit={false}>
-                  <StyledProject
-                    key={i}
-                    ref={el => (revealProjects.current[i] = el)}
-                    style={{
-                      transitionDelay: `${i >= GRID_LIMIT ? (i - GRID_LIMIT) * 100 : 0}ms`,
-                    }}>
-                    {projectInner(node)}
-                  </StyledProject>
-                </CSSTransition>
+                  ref={el => (revealProjects.current[i] = el)}
+                  variants={{
+                    hidden: { opacity: 0, y: 20 },
+                    visible: { opacity: 1, y: 0 },
+                  }}
+                  transition={{ duration: 0.5 }}
+                >
+                  {projectInner(node)}
+                </motion.li>
               ))}
-          </TransitionGroup>
+          </>
         )}
-      </ul>
+      </motion.ul>
 
-      <button className="more-button" onClick={() => setShowMore(!showMore)}>
+      <motion.button
+        className="more-button"
+        onClick={() => setShowMore(!showMore)}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.4 }}
+        viewport={{ once: true }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
         Show {showMore ? 'Less' : 'More'}
-      </button>
+      </motion.button>
     </StyledProjectsSection>
   );
 };

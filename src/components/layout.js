@@ -5,6 +5,7 @@ import { Head, Loader, Nav, Social, Email, Footer } from '@components';
 import { GlobalStyle, theme } from '@styles';
 import { ThemeProvider as CustomThemeProvider } from '../contexts/ThemeContext';
 import ThemeToggle from './ThemeToggle';
+import ErrorBoundary from './ErrorBoundary';
 
 const StyledContent = styled.div`
   display: flex;
@@ -66,16 +67,18 @@ const Layout = ({ children, location }) => {
             {isLoading && isHome ? (
               <Loader finishLoading={() => setIsLoading(false)} />
             ) : (
-              <StyledContent>
-                <Nav isHome={isHome} />
-                <Social isHome={isHome} />
-                <Email isHome={isHome} />
+              <ErrorBoundary>
+                <StyledContent>
+                  <Nav isHome={isHome} />
+                  <Social isHome={isHome} />
+                  <Email isHome={isHome} />
 
-                <div id="content">
-                  {children}
-                  <Footer />
-                </div>
-              </StyledContent>
+                  <div id="content">
+                    {children}
+                    <Footer />
+                  </div>
+                </StyledContent>
+              </ErrorBoundary>
             )}
           </ThemeProvider>
         </CustomThemeProvider>

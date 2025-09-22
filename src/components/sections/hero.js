@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import React from 'react';
+import { motion } from 'framer-motion';
 import styled from 'styled-components';
-import { navDelay, loaderDelay } from '@utils';
 import { usePrefersReducedMotion } from '@hooks';
 
 const StyledHeroSection = styled.section`
@@ -47,63 +46,102 @@ const StyledHeroSection = styled.section`
 `;
 
 const Hero = () => {
-  const [isMounted, setIsMounted] = useState(false);
   const prefersReducedMotion = usePrefersReducedMotion();
 
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      return;
-    }
-
-    const timeout = setTimeout(() => setIsMounted(true), navDelay);
-    return () => clearTimeout(timeout);
-  }, []);
-
-  const one = <h1>Hi, my name is</h1>;
-  const two = <h2 className="big-heading">Jacob Darling.</h2>;
-  const three = <h3 className="big-heading">I build innovative digital solutions.</h3>;
+  const one = (
+    <motion.h1
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.1 }}
+    >
+      Hi, my name is
+    </motion.h1>
+  );
+  const two = (
+    <motion.h2
+      className="big-heading"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.2 }}
+    >
+      Jacob Darling.
+    </motion.h2>
+  );
+  const three = (
+    <motion.h3
+      className="big-heading"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.3 }}
+    >
+      I build innovative digital solutions.
+    </motion.h3>
+  );
   const four = (
-    <>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.4 }}
+    >
       <p>
-        I’m a software engineer specializing in building (and occasionally designing) exceptional
-        digital experiences. Currently, I’m focused on building accessible, human-centered products
+        I'm a software engineer specializing in building (and occasionally designing) exceptional
+        digital experiences. Currently, I'm focused on building accessible, human-centered products
         at{' '}
         <a href="https://upstatement.com/" target="_blank" rel="noreferrer">
           Upstatement
         </a>
         .
       </p>
-    </>
+    </motion.div>
   );
   const five = (
-    <a
-      className="email-link"
-      href="https://www.newline.co/courses/build-a-spotify-connected-app"
-      target="_blank"
-      rel="noreferrer">
-      Check out my course!
-    </a>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5, delay: 0.5 }}
+    >
+      <a
+        className="email-link"
+        href="https://www.newline.co/courses/build-a-spotify-connected-app"
+        target="_blank"
+        rel="noreferrer">
+        Check out my course!
+      </a>
+    </motion.div>
   );
-
-  const items = [one, two, three, four, five];
 
   return (
     <StyledHeroSection>
       {prefersReducedMotion ? (
         <>
-          {items.map((item, i) => (
-            <div key={i}>{item}</div>
-          ))}
+          <h1>Hi, my name is</h1>
+          <h2 className="big-heading">Jacob Darling.</h2>
+          <h3 className="big-heading">I build innovative digital solutions.</h3>
+          <p>
+            I'm a software engineer specializing in building (and occasionally designing) exceptional
+            digital experiences. Currently, I'm focused on building accessible, human-centered products
+            at{' '}
+            <a href="https://upstatement.com/" target="_blank" rel="noreferrer">
+              Upstatement
+            </a>
+            .
+          </p>
+          <a
+            className="email-link"
+            href="https://www.newline.co/courses/build-a-spotify-connected-app"
+            target="_blank"
+            rel="noreferrer">
+            Check out my course!
+          </a>
         </>
       ) : (
-        <TransitionGroup component={null}>
-          {isMounted &&
-            items.map((item, i) => (
-              <CSSTransition key={i} classNames="fadeup" timeout={loaderDelay}>
-                <div style={{ transitionDelay: `${i + 1}00ms` }}>{item}</div>
-              </CSSTransition>
-            ))}
-        </TransitionGroup>
+        <>
+          {one}
+          {two}
+          {three}
+          {four}
+          {five}
+        </>
       )}
     </StyledHeroSection>
   );
