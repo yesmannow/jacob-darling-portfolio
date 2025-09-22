@@ -48,6 +48,21 @@ const mixins = {
     &:focus-visible {
       color: var(--green);
       outline: 0;
+      &:after {
+        width: 100%;
+      }
+    }
+    &:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 1px;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      background-color: var(--green);
+      transition: var(--transition);
+      opacity: 0.5;
     }
   `,
 

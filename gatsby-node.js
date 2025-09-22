@@ -9,8 +9,10 @@ const _ = require('lodash');
 
 exports.createPages = async ({ actions, graphql, reporter }) => {
   const { createPage } = actions;
-  const postTemplate = path.resolve(`src/templates/post.js`);
+  const postTemplate = path.resolve('src/templates/post.js');
   const tagTemplate = path.resolve('src/templates/tag.js');
+  const dashboardTemplate = path.resolve('src/templates/dashboard.js');
+  const demoTemplate = path.resolve('src/templates/demo.js');
 
   const result = await graphql(`
     {
@@ -18,6 +20,28 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
         filter: { fileAbsolutePath: { regex: "/content/posts/" } }
         sort: { order: DESC, fields: [frontmatter___date] }
         limit: 1000
+      ) {
+        edges {
+          node {
+            frontmatter {
+              slug
+            }
+          }
+        }
+      }
+      dashboards: allMarkdownRemark(
+        filter: { frontmatter: { template: { eq: "dashboard" } } }
+      ) {
+        edges {
+          node {
+            frontmatter {
+              slug
+            }
+          }
+        }
+      }
+      demos: allMarkdownRemark(
+        filter: { frontmatter: { template: { eq: "demo" } } }
       ) {
         edges {
           node {
@@ -43,7 +67,10 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
 
   // Create post detail pages
   const posts = result.data.postsRemark.edges;
+  const dashboards = result.data.dashboards?.edges || [];
+  const demos = result.data.demos?.edges || [];
 
+  // Create blog posts
   posts.forEach(({ node }) => {
     createPage({
       path: node.frontmatter.slug,
@@ -52,12 +79,36 @@ exports.createPages = async ({ actions, graphql, reporter }) => {
     });
   });
 
+  // Create dashboard pages
+  dashboards.forEach(({ node }) => {
+    const slug = node.frontmatter.slug;
+    createPage({
+      path: slug,
+      component: dashboardTemplate,
+      context: {
+        path: slug,
+      },
+    });
+  });
+
+  // Create demo pages
+  demos.forEach(({ node }) => {
+    const slug = node.frontmatter.slug;
+    createPage({
+      path: slug,
+      component: demoTemplate,
+      context: {
+        path: slug,
+      },
+    });
+  });
+
   // Extract tag data from query
   const tags = result.data.tagsGroup.group;
   // Make tag pages
   tags.forEach(tag => {
     createPage({
-      path: `/pensieve/tags/${_.kebabCase(tag.fieldValue)}/`,
+      path: `/tags/${_.kebabCase(tag.fieldValue)}/`,
       component: tagTemplate,
       context: {
         tag: tag.fieldValue,

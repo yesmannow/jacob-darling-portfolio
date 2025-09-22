@@ -38,6 +38,14 @@ module.exports = {
       url: '/#projects',
     },
     {
+      name: 'Dashboards',
+      url: '/dashboards',
+    },
+    {
+      name: 'Demos',
+      url: '/demos/gpt-ceu-assistant',
+    },
+    {
       name: 'Contact',
       url: '/#contact',
     },
